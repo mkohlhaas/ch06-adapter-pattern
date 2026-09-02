@@ -41,3 +41,23 @@ fn main() {
     println!("{}", adapter.get_status());
     // Output: Temperature is stable at 22.5°C.
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn adapter_status_contains_temperature() {
+        let legacy = LegacyThermostat;
+        let adapter = ThermostatAdapter { legacy_device: legacy };
+        let status = adapter.get_status();
+        assert!(status.contains("22.5"));
+        assert!(status.contains("Temperature is stable"));
+    }
+
+    #[test]
+    fn legacy_thermostat_temperature() {
+        let legacy = LegacyThermostat;
+        assert_eq!(legacy.current_temperature(), 22.5);
+    }
+}
