@@ -2,21 +2,29 @@
 // The following code illustrates how to adapt a third-party legacy thermodynamic device interface
 // into a unified, clean smart home system interface.
 
-// 1. The Target Trait (The interface your application expects)
+// ============================================================ //
+// 1. The Target Trait (The interface your application expects) //
+// ============================================================ //
+
 pub trait SmartDevice {
     fn get_status(&self) -> String;
 }
 
-// 2. The Adaptee (Third-party library code with an incompatible interface)
-pub struct LegacyThermostat;
+// ======================================================================== //
+// 2. The Adaptee (Third-party library code with an incompatible interface) //
+// ======================================================================== //
 
+pub struct LegacyThermostat;
 impl LegacyThermostat {
     pub fn current_temperature(&self) -> f32 {
         22.5
     }
 }
 
-// 3. The Adapter (Wraps the incompatible type)
+// ============================================ //
+// 3. The Adapter (Wraps the incompatible type) //
+// ============================================ //
+
 pub struct ThermostatAdapter {
     pub legacy_device: LegacyThermostat,
 }
@@ -30,6 +38,10 @@ impl SmartDevice for ThermostatAdapter {
     }
 }
 
+// ===== //
+// Usage //
+// ===== //
+
 fn main() {
     // Instantiate the incompatible third-party device
     let legacy_device = LegacyThermostat;
@@ -42,6 +54,10 @@ fn main() {
     // Output: Temperature is stable at 22.5°C.
 }
 
+// ===== //
+// Tests //
+// ===== //
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -49,7 +65,9 @@ mod tests {
     #[test]
     fn adapter_status_contains_temperature() {
         let legacy = LegacyThermostat;
-        let adapter = ThermostatAdapter { legacy_device: legacy };
+        let adapter = ThermostatAdapter {
+            legacy_device: legacy,
+        };
         let status = adapter.get_status();
         assert!(status.contains("22.5"));
         assert!(status.contains("Temperature is stable"));
